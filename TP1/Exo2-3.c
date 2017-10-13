@@ -1,0 +1,41 @@
+#include <stdlib.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <sys/wait.h>
+int CreeFils(int profondeur){
+            pid_t brancheGauche;
+
+  switch (profondeur){
+  case 0:
+    break;
+  default:
+    brancheGauche=fork();//Je crée mon fils gauche
+    if(brancheGauche!=0){ // je suis dans le pere == pid!=0
+      pid_t brancheDroite=fork();// Je refork a partir du pere pour avoir deux fils
+      if(getpid()!=0 && brancheDroite!=0){ //Je suis dans le pere
+	printf("\n                    Je suis le père : %d  mon père est : %d\n mon fils gauche est : %d                   mon fils droit est :%d\n",getpid(),getppid(),brancheGauche,brancheDroite);
+	sleep(200);
+	exit(0);
+      }
+      else if(brancheDroite==0 && brancheGauche!=0){//Je suis dans le fils droit bug ici
+	CreeFils(profondeur-1);
+	exit(0);
+      }
+    }
+      else{//Je suis dans le fils gauche
+      CreeFils(profondeur-1);
+      exit(0);
+      }
+    exit(0);
+    break;
+  }
+  exit(0);
+}
+  int main(){
+    int profondeur=0;
+    printf("Entrez la profondeur de votre arbre binaire\n");
+    scanf("%d",&profondeur);
+    CreeFils(profondeur);
+    return 0;
+  }

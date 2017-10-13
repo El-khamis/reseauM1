@@ -1,0 +1,6 @@
+On crée deux thread T1 et T2 et une struct pour savoir sur quelle zone on travail.
+
+1er thread Travail sur la zone et déverrouille le thread 2 quand il a finit et attend
+
+2eme thread attend d'être déverrouiller travail sur la zone et choisit une autre zone et
+libère le thread 1

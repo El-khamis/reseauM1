@@ -1,0 +1,47 @@
+Le thread numero 1 travail sur la partie 0
+Le thread numero 1 travail sur la partie 1
+Le thread numero 1 travail sur la partie 2
+Le thread numero 1 travail sur la partie 3
+Le thread numero 1 travail sur la partie 4
+Le thread numero 1 travail sur la partie 5
+Le thread numero 1 travail sur la partie 6
+Le thread numero 1 travail sur la partie 7
+Le thread numero 1 travail sur la partie 8
+Le thread numero 1 travail sur la partie 9
+Je suis le premier thread j'ai fini mon travail.
+Le thread numero 2 travail sur la partie 0
+Le thread numero 2 travail sur la partie 1
+Le thread numero 2 travail sur la partie 2
+Le thread numero 2 travail sur la partie 3
+Le thread numero 2 travail sur la partie 4
+Le thread numero 2 travail sur la partie 5
+Le thread numero 2 travail sur la partie 6
+Le thread numero 2 travail sur la partie 7
+Le thread numero 2 travail sur la partie 8
+Le thread numero 2 travail sur la partie 9
+Je suis le second thread j'ai fini mon travail.
+Le thread numero 3 travail sur la partie 0
+Le thread numero 3 travail sur la partie 1
+Le thread numero 3 travail sur la partie 2
+Le thread numero 3 travail sur la partie 3
+Le thread numero 3 travail sur la partie 4
+Le thread numero 3 travail sur la partie 5
+Le thread numero 3 travail sur la partie 6
+Le thread numero 3 travail sur la partie 7
+Le thread numero 3 travail sur la partie 8
+Le thread numero 3 travail sur la partie 9
+Je suis le troisième thread j'ai fini mon travail.
+Le thread numero 4 travail sur la partie 0
+Le thread numero 4 travail sur la partie 1
+Le thread numero 4 travail sur la partie 2
+Le thread numero 4 travail sur la partie 3
+Le thread numero 4 travail sur la partie 4
+Le thread numero 4 travail sur la partie 5
+Le thread numero 4 travail sur la partie 6
+Le thread numero 4 travail sur la partie 7
+Le thread numero 4 travail sur la partie 8
+Le thread numero 4 travail sur la partie 9
+Je suis le quatrième thread j'ai fini mon travail.
+IMAGE(15,15,270,15,15,15,15,15,1835627651,5)
+
+

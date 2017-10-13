@@ -1,0 +1,15 @@
+Exercice 1
+
+2)Si la tâche principal( le main) s'arrête avant la fin des
+autres tâches( les thread) alors tous les thread s'arrêteront
+ils receront un signal de fin.
+
+3)Si un thread fait exit() il quitte le programme et
+arrête donc tous les thread en cours même le main
+
+Exercice 4
+
+On lance les deux thread en même temps
+Le Thread 1 commence par verrouiller un mutex
+Le thread 2 fais d'abord un sleep(5) puis demande le déverrouillage
+d'un mutex( pour être sur de passer après)
