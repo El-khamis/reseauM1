@@ -1,0 +1,5 @@
+Pour envoyé une mise a jour sur git
+
+- git add *
+- git commit -m
+-git push
