@@ -1,4 +1,7 @@
+<<<<<<< HEAD
+=======
 //presque la bonne solution mais y'a un soucis si y'a plusieurs rendez vous 
+>>>>>>> 3f0eab65a7cc140da69442e19705cadc5f53331b
 
 #include <stdio.h>
 

@@ -1,4 +1,7 @@
+<<<<<<< HEAD
+=======
 //presque la bonne solution mais y'a un soucis si y'a plusieurs rendez vous
+>>>>>>> 3f0eab65a7cc140da69442e19705cadc5f53331b
 
 #include <stdio.h>
 
@@ -26,7 +29,10 @@ void * travail(void* par){
   if(variable_global==1){printf("je suis le thread %i et je suis arriver au rendez-vous en %i-er\n",moi,variable_global);} else{ printf("je suis le thread %i et je suis arriver au rendez-vous en %i-eme\n",moi,variable_global);}
   if(variable_global==variable_global2){dernierThread=moi;}
   while(variable_global!=variable_global2){ // Il n'est plus respecter
+<<<<<<< HEAD
+=======
   //  printf("\nLa variable global vaut %i, variable_global2 : %i\n",variable_global, variable_global2);
+>>>>>>> 3f0eab65a7cc140da69442e19705cadc5f53331b
     pthread_cond_wait(&condition, &verrou);
   } //Tant que c'est pas fini j'attend
   pthread_mutex_unlock(&verrou);//Pourquoi on déverouille le verrou alors que le pthread_cond_wait est censé l'avoir déjà fait ? Car On rperend le veerrou juste après le reveil
