@@ -42,12 +42,6 @@ int main(){
   printf("Bonjour  et bienvenue dans notre parking de %i places\n",adresse->nmbrDePlace);
   printf("Appuyez sur q pour quitter\n");
   scanf(" %c",&lettre);
-  if(adresse->nmbrDePlace==50){
-    printf("Notre parking est vide\n");
-  }
-  else{
-    printf("Il reste dans notre parking %i places, aurevoir \n",adresse->nmbrDePlace);
-  }
   printf("Suppression du segment mémoire\n");
   if(0>shmctl(identifiant,IPC_RMID,NULL)){
     my_err("Impossible de supprimer le segment memoire\n");
@@ -56,5 +50,11 @@ int main(){
     my_err("Impossible de supprimer le semaphore\n");
   }
   printf("Suppression du sémaphore\n");
+  if(adresse->nmbrDePlace==50){
+    printf("Notre parking est vide\n");
+  }
+  else{
+    printf("Il reste dans notre parking %i places, aurevoir \n",adresse->nmbrDePlace);
+  }
   return 0;
 }

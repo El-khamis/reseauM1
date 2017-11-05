@@ -25,11 +25,22 @@ struct resultat{
 };
 int main(){
   char operateur;
+  int continuer;
   key_t maCle=ftok("./FiFiFichier",10);//Creation de la clef
-  int file_id = msgget(maCle, IPC_CREAT|0666);//Creation de la file 
+  int file_id = msgget(maCle, IPC_CREAT|0666);//Creation de la file
   struct MonCalcul operation;
+  struct MonCalcul poubelle;
   struct resultat monResultat;
   while(1){
+    printf("Voulez-vous continuez ? \n0 pour oui\n1 pour non\n");
+    scanf("%i",&continuer);
+    if(continuer){
+      printf("Fin du programme, suppression de la file\n");
+      if(msgctl(file_id,IPC_RMID,NULL)<0){
+        my_err("Impossible de supprimer la file\n");
+      }
+      exit(0);
+    }
     printf("Entrez une operation (x operateur y)\n");
     scanf("%i",&((operation.x)));
     scanf(" %c",&(operateur));
@@ -57,10 +68,15 @@ int main(){
       my_err("Problem d'envoie\n");
     }
     printf("Le message a bien été envoyé, j'attend la réponse de mon calcul\n");
-    if(msgrcv(file_id,&monResultat,sizeof(monResultat),(long)0,0)<0){//Je reçois de tous les cannaux
-      my_err("Problem de reception\n");
+    if(msgrcv(file_id,&monResultat,sizeof(monResultat),(long)8,IPC_NOWAIT)<0){//si je met ipc_nowait je reçois jamais le premier message,
+                                                                    // mais si je met pas IPC_NOWAIT je peux pas détecter dans mes calculatrice ne sont pas alluméesd
+      perror("Problem de reception\n");
+      printf("Le programme en charge de ce calcul n'est pas en cours d'execution, je retire ce message de la fille pour ne pas créer de doublon\n");
+      msgrcv(file_id,&poubelle,sizeof(poubelle),0,0);
     }
-    printf("Le resultat est : %i\n",monResultat.res);
+    else{
+      printf("Le resultat est : %i\n",monResultat.res);
+    }
   }
   return 0;
 }

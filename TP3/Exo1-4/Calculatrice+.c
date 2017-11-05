@@ -33,7 +33,7 @@ int main(){
      printf("%i\n",operation.y);
      printf("Message reçu\n");
      struct resultat monResultat;
-     monResultat.etiquette=1;
+     monResultat.etiquette=8;
      monResultat.res=operation.x+operation.y;
      if(msgsnd(file_id,&monResultat,sizeof(monResultat),0)<0){
        my_err("Problem d'envoie");
@@ -42,4 +42,4 @@ int main(){
      msgctl(file_id,1,NULL);
    }
    return 0;
- }
+}
