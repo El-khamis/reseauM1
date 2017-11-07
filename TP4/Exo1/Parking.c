@@ -8,7 +8,6 @@
 # include <sys/ipc.h>
 # include <sys/shm.h>
 #include <sys/sem.h>
-#include <sys/types.h>
 
 void my_err(char *message) {
     perror(message);

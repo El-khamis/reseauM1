@@ -11,7 +11,7 @@
 # include <sys/types.h>
 # include <time.h>
 
-
+//Je veux que mes prog s'arrêtent quand je ferme le parking
 void my_err(char *message) {
     perror(message);
     exit(1);
@@ -40,14 +40,18 @@ int main(){
   if(semaphore_id==-1){
     my_err("Erreur à la création du sémaphore\n");
   }
-  printf("On a obtenu le sémaphore\n");
+  printf("Création du sémaphore réussie\n");
   op.sem_num = 0; //Numéro de notre sémaphore: le premier et le seul
   op.sem_flg = 0; //On ne s'en occupe pas
   while(1){
-    sleep(1);
     //Entrée en section critique
     op.sem_op = -1; //Pour un P() on décrémente
-   semop(semaphore_id, &op, 1); //Entrée dans la section critique (P() ou down())
+   if(-1==semop(semaphore_id, &op, 1)){ //Entrée dans la section critique (P() ou down())
+     my_err("Impossible de récuperer le semaphore\n");
+   }
+   printf("J'ai obtenu le sémaphore ");
+   printf("Je dors 3 sec \n");
+   sleep(3);
     if(adresse->nmbrDePlace>0){
       printf("Vous pouvez rentrez dans le parking: ");
       printf("vous avez le ticket numero %i\n",rand()%100);
@@ -59,7 +63,10 @@ int main(){
     }
     //Sortie de section critique
     op.sem_op = 1; //Pour un V() on incrémente
-    semop(semaphore_id, &op, 1); //Sortie de la section critique (V() ou up())
+    if(-1==semop(semaphore_id, &op, 1)){ //Sortie de la section critique (V() ou up())
+      my_err("Impossible de récuperer le semaphore\n");
+    }
+    printf("Je libère le sémaphore\n");
   }
   printf("%i\n",adresse->nmbrDePlace);
 

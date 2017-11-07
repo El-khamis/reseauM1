@@ -19,6 +19,7 @@ void my_err(char *message) {
 
 int main(){
   struct sembuf op;
+  int Resultat[1];
   int semaphore_id=0;
   key_t maCle=ftok("./Fichier",10);//Creation de la clef
 
@@ -26,24 +27,25 @@ int main(){
   if(semaphore_id==-1){
     my_err("Erreur à la création du sémaphore\n");
   }
-  printf("J'ai obtenu le sémaphore\n");
   printf("Je travail \n");
-  sleep(3);
+  sleep(1);
   //On décremente
 
   op.sem_num = 0; //Numéro de notre sémaphore: le premier et le seul
   op.sem_flg = 0; //On ne s'en occupe pas
   op.sem_op = -1; //Pour un P() on décrémente
   semop(semaphore_id, &op, 1); //Entrée dans la section critique (P() ou down())
-
-
+  printf("Je suis dans la section critique\n");
   //On attend
-  op.sem_num = 3; //Numéro de notre sémaphore: le premier et le seul
-  op.sem_flg = 0; //On ne s'en occupe pas
-  op.sem_op = -3; //Pour un P() on décrémente
+  if(semctl(semaphore_id, 0, GETVAL, Resultat) == -1){
+    my_err("Impossible d'initialiser le sémaphore 0\n");
+  }
+    printf("Res[%i]=%i\n",1,Resultat[1]);
 
-    printf("Je suis au rendez-vous\n");
-   semop(semaphore_id, &op, 1); //Entrée dans la section critique (P() ou down())
+  op.sem_op = 0; //Pour un P() on décrémente
+  printf("Je suis au rendez-vous\n");
+
+  semop(semaphore_id, &op, 1); //Entrée dans la section critique (P() ou down())
 
 
    printf("Je quitte le rdv\n");
