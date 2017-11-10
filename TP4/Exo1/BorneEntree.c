@@ -46,12 +46,11 @@ int main(){
   while(1){
     //Entrée en section critique
     op.sem_op = -1; //Pour un P() on décrémente
+    sleep(1);
    if(-1==semop(semaphore_id, &op, 1)){ //Entrée dans la section critique (P() ou down())
      my_err("Impossible de récuperer le semaphore\n");
    }
    printf("J'ai obtenu le sémaphore ");
-   printf("Je dors 3 sec \n");
-   sleep(3);
     if(adresse->nmbrDePlace>0){
       printf("Vous pouvez rentrez dans le parking: ");
       printf("vous avez le ticket numero %i\n",rand()%100);
