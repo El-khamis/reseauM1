@@ -48,7 +48,7 @@ int main(){
     op.sem_op = -1; //Pour un P() on décrémente
     sleep(1);
    if(-1==semop(semaphore_id, &op, 1)){ //Entrée dans la section critique (P() ou down())
-     my_err("Impossible de récuperer le semaphore\n");
+     my_err("Impossible de rentrer dans la zone critique\n");
    }
    printf("J'ai obtenu le sémaphore ");
     if(adresse->nmbrDePlace>0){
@@ -63,7 +63,7 @@ int main(){
     //Sortie de section critique
     op.sem_op = 1; //Pour un V() on incrémente
     if(-1==semop(semaphore_id, &op, 1)){ //Sortie de la section critique (V() ou up())
-      my_err("Impossible de récuperer le semaphore\n");
+      my_err("Impossible de quitter la zone critique\n");
     }
     printf("Je libère le sémaphore\n");
   }

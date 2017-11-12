@@ -28,7 +28,7 @@ int main(){
     my_err("Erreur à la création du sémaphore\n");
   }
   printf("Je travail \n");
-  sleep(1);
+  sleep(3);
   //On décremente
 
   op.sem_num = 0; //Numéro de notre sémaphore: le premier et le seul

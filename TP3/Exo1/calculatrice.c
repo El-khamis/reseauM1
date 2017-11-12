@@ -23,32 +23,32 @@ struct calcul{
    int IdDuFichier=0,write=0;
    ma_cle=ftok("./MonFichier",1);
    IdDuFichier= msgget(ma_cle, 0666|IPC_CREAT);
-  struct calcul message;
-  while(1){
-    if(msgrcv(IdDuFichier, &message, sizeof(message),0,0)==-1){my_err("Problem de reception \n");}
-    printf("%i",message.x);
-    printf("%c",message.operateur);
-    printf("%i",message.y);
-    switch (message.operateur){
-    case '-':
-    resultat=message.x-message.y;
-    break;
-    case '/':
-    resultat=message.x/message.y;
-    break;
-    case '*':
-    resultat=message.x*message.y;
-    break;
-    case '+':
-    resultat=message.x+message.y;
-    break;
-    default :
-    printf("Aucun operateur reconnu\n");
-    break;
-  }
-  printf("\n%i\n",resultat);
-  msgsnd(IdDuFichier, &resultat, sizeof(resultat), 0);
-  msgctl(IdDuFichier,1,NULL);
+   struct calcul message;
+   while(1){
+      if(msgrcv(IdDuFichier, &message, sizeof(message),0,0)==-1){my_err("Problem de reception \n");}
+      printf("%i",message.x);
+      printf("%c",message.operateur);
+      printf("%i",message.y);
+      switch (message.operateur){
+         case '-':
+         resultat=message.x-message.y;
+         break;
+         case '/':
+         resultat=message.x/message.y;
+         break;
+         case '*':
+         resultat=message.x*message.y;
+         break;
+         case '+':
+         resultat=message.x+message.y;
+         break;
+         default :
+         printf("Aucun operateur reconnu\n");
+         break;
+      }
+      printf("\n%i\n",resultat);
+      msgsnd(IdDuFichier, &resultat, sizeof(resultat), 0);
+      msgctl(IdDuFichier,1,NULL);
+   }
+ return 0;
 }
-   return 0;
- }

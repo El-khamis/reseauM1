@@ -24,7 +24,6 @@ int main(){
   float temps;
   clock_t t1, t2;
   t1 = clock();
-  printf("ékkkk\n");
   struct MonNombre nmbr;
   int pid2=0;
   int nmbrDeFork=0;
@@ -35,7 +34,6 @@ int main(){
   }
   printf("Entrez le nombre de fils à créer\n");
   scanf("%d",&nmbrDeFork);
-
   for(int i=0;i<nmbrDeFork;i++){
     pid2=fork();
     if(pid2==0){

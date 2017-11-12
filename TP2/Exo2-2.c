@@ -13,7 +13,6 @@
 
 pthread_mutex_t verrou = PTHREAD_MUTEX_INITIALIZER;
 struct data {
-
     int *Tab1;
     int *Tab2;
     int *Resultat;//Jfface surement ce tableau a chaque fois

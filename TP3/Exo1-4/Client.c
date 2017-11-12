@@ -67,9 +67,9 @@ int main(){
     if(msgsnd(file_id,&operation,sizeof(operation),0)<0){
       my_err("Problem d'envoie\n");
     }
+    sleep(0.3);
     printf("\n\nLe message a bien été envoyé, j'attend la réponse de mon calcul\n");
-    if(msgrcv(file_id,&monResultat,sizeof(monResultat),(long)8,IPC_NOWAIT)<0){//si je met ipc_nowait je reçois jamais le premier message,
-                                                                    // mais si je met pas IPC_NOWAIT je peux pas détecter dans mes calculatrice ne sont pas alluméesd
+    if(msgrcv(file_id,&monResultat,sizeof(monResultat),(long)8,IPC_NOWAIT)<0){//si je met ipc_nowait je reçois jamais le premier message,                                                          // mais si je met pas IPC_NOWAIT je peux pas détecter dans mes calculatrice ne sont pas alluméesd
       perror("Problem de reception\n");
       printf("\n\n\nLe programme en charge de ce calcul n'est pas en cours d'execution, je retire ce message de la fille pour ne pas créer de doublon\n");
       msgrcv(file_id,&poubelle,sizeof(poubelle),0,0);

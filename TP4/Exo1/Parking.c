@@ -24,7 +24,7 @@ int main(){
   int identifiant;
   int semaphore_id;
   key_t maCle=ftok("./Fichier",10);//Creation de la clef
-  identifiant= shmget(maCle,sizeof(parking),IPC_CREAT|0666);//Créer un segment
+  identifiant= shmget(maCle,sizeof(parking),IPC_CREAT|0666);//Créer un segment mémoire
   if(identifiant==-1){
     my_err("Impossible de creer la zone mémoire\n");
   }
