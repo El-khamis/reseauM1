@@ -33,7 +33,7 @@ int main(){
 
 
 
-  printf("Vous devez remplir un sceau de %d litres et il contient pour l'instant %d litres \n",Sceau->capaciter, Sceau->sceau);
+  printf("Bonjour l'équipe bleu vous devez remplir le sceau de %d litres et il est pour l'instant vide \n",Sceau->capaciter);
   semaphore_id = semget(maCle, 1, IPC_CREAT | 0666); //Obtention d'un identifiant de sémaphore
   if(semaphore_id==-1){
     my_err("Erreur à la création du sémaphore\n");
@@ -63,30 +63,33 @@ int main(){
       if(-1==semop(semaphore_id, &op,1)){ //Entrée dans la section critique (P() ou down())
          //my_err("Impossible d'entrer dans la semaphore\n");
          op.sem_flg = 0;
-         printf("Je suis le fils %d, j'attend de prendre un bambou \n",getpid());
+         printf("%d, j'attend de prendre un bambou \n",getpid()%100);
          if(-1==semop(semaphore_id, &op,1)){ //Entrée dans la section critique (P() ou down())
             //my_err("Impossible d'entrer dans la semaphore\n");
           }
+          sleep(0.3);
        }
        if(Sceau->sceau >= Sceau->capaciter){
          exit(1);
        }
-       printf("Je suis le fils %d et j'ai pris un bambou ",getpid());
+       printf("%d et j'ai pris un bambou ",getpid()%100);
       printf("je cours à la bassine !\n");
       int val=rand()%5;
       int val2=rand()%10;
       sleep(val);
-      printf("Je suis le fils %d j'ai fini de chercher l'eau en %d secondes et j'ai ramener %d litres \n",getpid(),val,val2);
+      printf("%d j'ai fini de chercher l'eau en %d secondes et j'ai ramener %d litres \n",getpid()%100,val,val2);
       //DEBUT DE SECTION CRITIQUE on rempli pas en même temps;
       op.sem_op=-1;
       op.sem_num=2;
+      op.sem_flg=0;
       if(-1==semop(semaphore_id, &op, 1)){ //On décrémente le second sémaphore
-        my_err("Impossible de décrementer le second semaphore\n");
+        my_err("Impossible d'entrer dans la section critique\n");
       }
       printf("\n\n\nJ ENTRE EN SECTION CRITIQUE \n\n\n");
-      printf("Je suis le fils %d,et j'ai rempli le sceau de %d litres\n",getpid(),val2);
+      printf("%d,et j'ai rempli le sceau de %d litres\n",getpid()%100,val2);
       Sceau->sceau+=val2;
       op.sem_op=1;
+      op.sem_num=2;
       printf("\n\n\nFIN EN SECTION CRITIQUE \n\n\n");
       if(-1==semop(semaphore_id, &op, 1)){ //On décrémente le second sémaphore
         my_err("Impossible de sortir de la section critique\n");
@@ -97,7 +100,7 @@ int main(){
       op.sem_flg=0;
 
 
-      printf("Je suis le fils %d et je suis au premier rendez-vous\n",getpid());
+      printf("%d et je suis au premier rendez-vous\n",getpid()%100);
       if(-1==semop(semaphore_id, &op, 1)){ //On décrémente le second sémaphore
         my_err("Impossible de sortir du sémaphore\n");
       }
@@ -106,10 +109,11 @@ int main(){
       if(-1==semop(semaphore_id, &op, 1)){ //On décrémente le second sémaphore
         my_err("Impossible de sortir du sémaphore\n");
       }
-      printf("Je suis le fils %d mon voisin est la ",getpid());
+      printf("%d mon voisin est la ",getpid()%100);
       //Mtn on remet tous les semaphore à leur valeur initiale
-      printf("Nous avons rempli le sceau de %d litres chacun il y a maintenant %d lites sur un total de %d ",val2,Sceau->sceau, Sceau->capaciter);
+      printf("Nous avons rempli le sceau de %d litres chacun il y a maintenant %d : ",val2,Sceau->sceau);
       printf("On a rendu les bambous\n");
+      sleep(0.2);
       if(Sceau->sceau >= Sceau->capaciter){
         exit(1);
       }

@@ -65,15 +65,16 @@ int main(){
     op.sem_op=0;
     op.sem_num=1;
     op.sem_flg=0;
-    if(-1==semop(semaphore_id, &op, 1)){ //On décrémente le second sémaphore
+    if(-1==semop(semaphore_id, &op, 1)){ //On on attend que le secon semaphore soit à 0 le second sémaphore
       my_err("Impossible de sortir du sémaphore\n");
     }
     op.sem_op=2;
-    if(-1==semop(semaphore_id, &op, 1)){ //On décrémente le second sémaphore
+    op.sem_num=0;
+    if(-1==semop(semaphore_id, &op, 1)){ //On incremente de 2 le second sémaphore
       my_err("Impossible de sortir du sémaphore\n");
     }
-    op.sem_num=0;
-    if(-1==semop(semaphore_id, &op, 1)){ //On décrémente le second sémaphore
+    op.sem_num=1;
+    if(-1==semop(semaphore_id, &op, 1)){ //On incremente de 2 le second sémaphore
       my_err("Impossible de sortir du sémaphore\n");
     }
     printf("Vous avez rendu les bambous\n");
