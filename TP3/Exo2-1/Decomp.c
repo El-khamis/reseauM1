@@ -53,13 +53,12 @@ int main(){
         printf("J'ai reçu le nombre %d\n",nmbrFils.x);
       }
 
-
-      for(i=2;i<=nmbrFils.x/2;i++){
+      for(i=2;i<=nmbrFils.x;i++){
         if(nmbrFils.x%i==0){
           break;
         }
       }
-      if((nmbrFils.x/2)+1==i){
+      if(nmbrFils.x+1==i){
         nmbrFils.etiquette=2;
         if(msgsnd(file_id,&nmbrFils,sizeof(nmbrFils),0)<0){my_err("Problem d'envoie\n");}
       }

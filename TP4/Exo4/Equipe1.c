@@ -27,7 +27,6 @@ int main(){
   struct sembuf op;
   int pid2=1;
   key_t maCle=ftok("./FiFiFichier",10);//Creation de la clef
-  int file_id = msgget(maCle, IPC_CREAT|0666);//Creation de la file pour l'envoie de message
   //On choppe le sémaphore
   identifiant= shmget(maCle,0,IPC_CREAT|0666);//Demande d'attache à un segment mémoire
   Sceau=shmat(identifiant,NULL,0); //Initialise la structure
@@ -42,9 +41,7 @@ int main(){
   printf("Création du sémaphore réussie\n");
   op.sem_num = 0; //Numéro de notre sémaphore: le premier et le seul
   op.sem_flg = 0; //On ne s'en occupe pas
-  if(file_id==-1){
-    my_err("Problem de creation de la file\n");
-  }
+
   // Afficher le nombre de ressource pour chaque sémaphore
 
 
@@ -58,23 +55,24 @@ int main(){
 
 
   if(pid2==0){//Fils (mais on sait pas qui et on s'enfou y'en a deux qu attende sion les autres taff )
-  struct sembuf TableauOpe[2];
-  struct sembuf TableauOpe2[1];
-  TableauOpe2[0].sem_num = 0;//Je  décremente la valeur
-  TableauOpe2[0].sem_op = -1;
-  TableauOpe2[0].sem_flg = 0;
-  srand(time(NULL));
-      while(Sceau->sceau < Sceau->capaciter){
-        printf("Je suis le fils %d, j'attend de prendre un bambou \n",getpid());
-        if(-1==semop(semaphore_id, TableauOpe2,1)){ //Entrée dans la section critique (P() ou down())
-           my_err("Impossible d'entrer dans la semaphore\n");
-         }
-    /*  op.sem_op=0;
-      //Première attente
-      if(-1==semop(semaphore_id, &op, 1)){ //Attente des deux premier candidats
-         my_err("Impossible d'entrer dans la semaphore\n");
-       }*/
-      printf("Je suis le fils %d je cours à la bassine !\n",getpid());
+    op.sem_num = 0;//Je  décremente la valeur
+    op.sem_op = -1;
+    op.sem_flg = IPC_NOWAIT;
+    srand(time(NULL));
+    while(Sceau->sceau < Sceau->capaciter){
+      if(-1==semop(semaphore_id, &op,1)){ //Entrée dans la section critique (P() ou down())
+         //my_err("Impossible d'entrer dans la semaphore\n");
+         op.sem_flg = 0;
+         printf("Je suis le fils %d, j'attend de prendre un bambou \n",getpid());
+         if(-1==semop(semaphore_id, &op,1)){ //Entrée dans la section critique (P() ou down())
+            //my_err("Impossible d'entrer dans la semaphore\n");
+          }
+       }
+       if(Sceau->sceau >= Sceau->capaciter){
+         exit(1);
+       }
+       printf("Je suis le fils %d et j'ai pris un bambou ",getpid());
+      printf("je cours à la bassine !\n");
       int val=rand()%5;
       int val2=rand()%10;
       sleep(val);
@@ -83,40 +81,38 @@ int main(){
       op.sem_op=-1;
       op.sem_num=2;
       if(-1==semop(semaphore_id, &op, 1)){ //On décrémente le second sémaphore
-        my_err("Impossible d'entrer dans la semaphore\n");
+        my_err("Impossible de décrementer le second semaphore\n");
       }
+      printf("\n\n\nJ ENTRE EN SECTION CRITIQUE \n\n\n");
       printf("Je suis le fils %d,et j'ai rempli le sceau de %d litres\n",getpid(),val2);
       Sceau->sceau+=val2;
       op.sem_op=1;
-      op.sem_num=2;
+      printf("\n\n\nFIN EN SECTION CRITIQUE \n\n\n");
       if(-1==semop(semaphore_id, &op, 1)){ //On décrémente le second sémaphore
-        my_err("Impossible d'entrer dans la semaphore\n");
+        my_err("Impossible de sortir de la section critique\n");
       }
       //FIN DE SECTION CRITIQUE
-      struct sembuf DecremAndWait[2];
-      DecremAndWait[0].sem_op=-1;
-      DecremAndWait[0].sem_num=1;
-      DecremAndWait[0].sem_flg=0;
-      DecremAndWait[1].sem_op=0;
-      DecremAndWait[1].sem_num=1;
-      DecremAndWait[1].sem_flg=0;
+      op.sem_op=-1;
+      op.sem_num=1;
+      op.sem_flg=0;
+
 
       printf("Je suis le fils %d et je suis au premier rendez-vous\n",getpid());
-      if(-1==semop(semaphore_id, DecremAndWait, 1)){ //On décrémente le second sémaphore
+      if(-1==semop(semaphore_id, &op, 1)){ //On décrémente le second sémaphore
         my_err("Impossible de sortir du sémaphore\n");
       }
-      //Mtn on remet tous les semaphore à leur valeur initiale
-      TableauOpe[0].sem_num = 0;//Je incremente la valeur
-      TableauOpe[0].sem_op = 1;
-      TableauOpe[0].sem_flg = 0;
-      TableauOpe[1].sem_num = 1;//J'incremente la value
-      TableauOpe[1].sem_op =  1;
-      TableauOpe[1].sem_flg = 0;
-      if(-1==semop(semaphore_id, TableauOpe, 2)){ //Attente des deux premier candidats
-         my_err("Impossible d'entrer dans la semaphore\n");
+      printf("J'ai décrementer le semaphore mtn j'attend\n");
+      op.sem_op=0;
+      if(-1==semop(semaphore_id, &op, 1)){ //On décrémente le second sémaphore
+        my_err("Impossible de sortir du sémaphore\n");
       }
-      printf("Je suis le fils %d nous avons rempli le sceau de %d litres il y a maintenant %d lites sur un total de %d ",getpid(),val2,Sceau->sceau, Sceau->capaciter);
+      printf("Je suis le fils %d mon voisin est la ",getpid());
+      //Mtn on remet tous les semaphore à leur valeur initiale
+      printf("Nous avons rempli le sceau de %d litres chacun il y a maintenant %d lites sur un total de %d ",val2,Sceau->sceau, Sceau->capaciter);
       printf("On a rendu les bambous\n");
+      if(Sceau->sceau >= Sceau->capaciter){
+        exit(1);
+      }
     }
     exit(1);
   }

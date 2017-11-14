@@ -30,6 +30,7 @@ int main(){
   struct monSceau * adresse;
   int semaphore_id, identifiant=0;
   union semun egCtrl;
+  struct sembuf op;
   egCtrl.val=2;
   key_t maCle=ftok("./Fichier",10);//Creation de la clef
   //Creation du semaphore qui sera utilisé par les autres programmes
@@ -45,19 +46,37 @@ int main(){
 
   if(semaphore_id==-1){my_err("Erreur à la création du sémaphore\n");}
   printf("J'ai créer un sémaphore\n");
-  if(semctl(semaphore_id, 0, SETVAL, egCtrl) == -1){
+  if(semctl(semaphore_id, 0, SETVAL, egCtrl) == -1){//Premier semaphore pour commencer
     my_err("Impossible d'initialiser le sémaphore 0\n");
   }
   printf("J'ai initialiser le semaphore 0\n");
-  if(semctl(semaphore_id, 1, SETVAL, egCtrl) == -1){
+  if(semctl(semaphore_id, 1, SETVAL, egCtrl) == -1){//Deuxieme semaphore 2eme RDV
     my_err("Impossible d'initialiser le sémaphore 1\n");
   }
   printf("J'ai initialiser le semaphore 1\n");
   egCtrl.val=1;
-  if(semctl(semaphore_id, 2, SETVAL, egCtrl) == -1){
+  if(semctl(semaphore_id, 2, SETVAL, egCtrl) == -1){//Exclusion mutuelle
     my_err("Impossible d'initialiser le sémaphore 2\n");
   }
   printf("J'ai initialiser le semaphore 2\n");
   printf("J'ai initialiser mes sémaphore\n");
+
+  while(1){
+    op.sem_op=0;
+    op.sem_num=1;
+    op.sem_flg=0;
+    if(-1==semop(semaphore_id, &op, 1)){ //On décrémente le second sémaphore
+      my_err("Impossible de sortir du sémaphore\n");
+    }
+    op.sem_op=2;
+    if(-1==semop(semaphore_id, &op, 1)){ //On décrémente le second sémaphore
+      my_err("Impossible de sortir du sémaphore\n");
+    }
+    op.sem_num=0;
+    if(-1==semop(semaphore_id, &op, 1)){ //On décrémente le second sémaphore
+      my_err("Impossible de sortir du sémaphore\n");
+    }
+    printf("Vous avez rendu les bambous\n");
+  }
   return 0;
 }
